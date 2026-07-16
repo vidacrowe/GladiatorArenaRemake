@@ -21,6 +21,50 @@ public class GameManager : MonoBehaviour
         gPlayer2 = new GladiatorCPU();
     }
 
+    public void JudgeBatttle(string p1Action)
+    {
+        string p2Action = ((GladiatorCPU)gPlayer2).CPUChooseAction();
+        string actionkey = p1Action + p2Action;
+        switch (actionkey)
+        {
+            case "strikeblock":
+            case "parryparry":
+            case "parryblock":
+            case "blockstrike":
+            case "blockparry":
+            case "blockblock":
+                //No Damage
+                break;
+            case "strikestrike":
+            case "thrustthrust":
+                //1 Damage to Both
+                break;
+            case "parrythrust":
+                //1 Damage to P2
+                break;
+            case "thrustparry":
+                //1 Damage to P1
+                break;
+            case "strikethrust":
+            case "thrustblock":
+            case "parrystrike":
+                //2 Damage to P2
+                break;
+            case "strikeparry":
+            case "thruststrike":
+            case "blockthrust":
+                //2 Damage to P1
+                break;
+        }
+        ((GladiatorCPU)gPlayer2).SetCombatAI(((GladiatorCPU)gPlayer2).Shift.Analyze());
+    }
+
+    public void DealDamage(int p1Damage, int p2Damage)
+    {
+        gPlayer1.ReceiveDamage(p1Damage);
+        gPlayer2.ReceiveDamage(p2Damage);
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -32,5 +76,25 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void StrikePressed()
+    {
+        JudgeBatttle("strike");
+    }
+
+    public void ThrustPressed()
+    {
+        JudgeBatttle("thrust");
+    }
+
+    public void ParryPressed()
+    {
+        JudgeBatttle("parry");
+    }
+
+    public void BlockPressed()
+    {
+        JudgeBatttle("block");
     }
 }

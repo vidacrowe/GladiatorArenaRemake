@@ -7,8 +7,9 @@ public class GladiatorCPU : Gladiator
 
     public GladiatorCPU()
     {
-        SetInitialCombatAI();
+        SetCombatAI();
         SetStrategy();
+        this.HP = 10;
     }
 
     public GladiatorCPU(string gladName) : base(gladName)
@@ -18,10 +19,10 @@ public class GladiatorCPU : Gladiator
     //public CombatAI Paradigm
     //{ get { return gParadigm; } }
 
-    //public StrategyShift Shift
-    //{ get { return gShift; } }
+    public StrategyShift Shift
+    { get { return gShift; } }
 
-    public void SetInitialCombatAI()
+    public void SetCombatAI()
     {
         int rngCombat = Random.Range(1, 5);
         switch (rngCombat)
@@ -41,6 +42,31 @@ public class GladiatorCPU : Gladiator
             case 4:
                 gParadigm = new DefensiveAI();
                 this.GladName = "Tarnished Gladiator";
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void SetCombatAI(string aiChange)
+    {
+        switch (aiChange)
+        {
+            case "attacker":
+                gParadigm = new AttackerAI();
+                gShift.ParadigmShifted = true;
+                break;
+            case "counter":
+                gParadigm = new CounterAI();
+                gShift.ParadigmShifted = true;
+                break;
+            case "balanced":
+                gParadigm = new BalancedAI();
+                gShift.ParadigmShifted = true;
+                break;
+            case "defensive":
+                gParadigm = new DefensiveAI();
+                gShift.ParadigmShifted = true;
                 break;
             default:
                 break;

@@ -20,4 +20,9 @@ public class Gladiator : MonoBehaviour
         this.HP = 10;
         this.GladName = gladName;
     }
+
+    public void ReceiveDamage(int damageTaken)
+    {
+        g_HP -= damageTaken;
+    }
 }
