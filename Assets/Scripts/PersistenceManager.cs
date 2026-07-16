@@ -5,6 +5,9 @@ public class PersistenceManager : MonoBehaviour
     public static PersistenceManager PersistenceInstance { get; private set; }
     private string playerName;
 
+    public string PlayerName
+    { get { return playerName; } }
+
     private void Awake()
     {
         //Singleton - Ensure only one instance of PersistenceManager exists.
