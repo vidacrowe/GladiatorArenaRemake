@@ -16,8 +16,8 @@ public class GladiatorCPU : Gladiator
     {
     }
 
-    //public CombatAI Paradigm
-    //{ get { return gParadigm; } }
+    public CombatAI Paradigm
+    { get { return gParadigm; } }
 
     public StrategyShift Shift
     { get { return gShift; } }

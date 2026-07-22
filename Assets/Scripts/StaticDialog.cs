@@ -23,22 +23,22 @@ static class StaticDialog
         return strategyTypeText;
     }
 
-    public static string CPUCombatAIText(int combatType)
+    public static string CPUCombatAIShiftText(int combatType, string p2Name)
     {
         string combatTypeText = string.Empty;
         switch (combatType)
         {
             case 1:
-                combatTypeText = "";
+                combatTypeText = string.Format("Your eyes met as {0} held their blade forward...", p2Name);
                 break;
             case 2:
-                combatTypeText = "";
+                combatTypeText = string.Format("There was a glint in their eyes as {0} raised their blade...", p2Name);
                 break;
             case 3:
-                combatTypeText = "";
+                combatTypeText = string.Format("{0} smirked... Who knows what they'll do?", p2Name);
                 break;
             case 4:
-                combatTypeText = "";
+                combatTypeText = string.Format("{0} grunted as they take a defensive stance...", p2Name);
                 break;
         }
         return combatTypeText;
@@ -100,7 +100,7 @@ static class StaticDialog
 
             //Text for 2 Damage to Player 1:
             case "strikeparry":
-                turnOutcomeText = string.Format("{0} aimed to Strike {1}, but {1} Parried the hit!\n\n{1} takes 2 damage!", p1Name, p2Name);
+                turnOutcomeText = string.Format("{0} aimed to Strike {1}, but {1} Parried the hit!\n\n{0} takes 2 damage!", p1Name, p2Name);
                 break;
             case "thruststrike":
                 turnOutcomeText = string.Format("{0} lunged with a Thrust, but {1} disarmed them with a Strike!\n\n{0} takes 2 damage!", p1Name, p2Name);

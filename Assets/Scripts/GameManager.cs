@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using static UnityEditor.Experimental.GraphView.GraphView;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI turnOutcomeText;
     public GameObject turnOutcomeBox;
     public GameObject actionBox;
+    public GameObject endOfGameBox;
 
     public Gladiator Player1
     { get { return g_Player1; } }
@@ -20,7 +22,7 @@ public class GameManager : MonoBehaviour
     public Gladiator Player2
     { get { return g_Player2; } }
 
-    public void CreatePlayerGladiator()
+    private void CreatePlayerGladiator()
     {
         if (PersistenceManager.PersistenceInstance != null)
         {
@@ -30,10 +32,9 @@ public class GameManager : MonoBehaviour
         {
             g_Player1 = new Gladiator("Bravely Defaulting Gladiator");
         }
-        
     }
 
-    public void CreateCPUGladiator()
+    private void CreateCPUGladiator()
     {
         g_Player2 = new GladiatorCPU();
     }
@@ -54,17 +55,20 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public void JudgeBatttle(string p1Action)
+    private void JudgeBatttle(string p1Action)
     {
         string p2Action = ((GladiatorCPU)g_Player2).CPUChooseAction();
         string actionKey = p1Action + p2Action;
         CompareAttacks(actionKey);
         ReviewBattleAftermath(p1Action, p2Action);
-
-        //((GladiatorCPU)g_Player2).SetCombatAI(((GladiatorCPU)g_Player2).Shift.Analyze());
+        //Debug.Log(g_Player2.GladName + " Combat Type: " + ((GladiatorCPU)g_Player2).Paradigm.CombatType);
+        if (!((GladiatorCPU)g_Player2).Shift.ParadigmShifted && isGameActive)
+        {
+            SettleCPUPostTurnActions(p1Action);
+        }
     }
 
-    public void CompareAttacks(string actionKey)
+    private void CompareAttacks(string actionKey)
     {
         switch (actionKey)
         {
@@ -105,14 +109,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void DealDamage(int p1Damage, int p2Damage)
+    private void DealDamage(int p1Damage, int p2Damage)
     {
         g_Player1.ReceiveDamage(p1Damage);
         g_Player2.ReceiveDamage(p2Damage);
-        Debug.Log("Player 1 HP: " + g_Player1.HP + "; Player 2 HP: " + g_Player2.HP);
+        Debug.Log(g_Player1.GladName + " HP: " + g_Player1.HP + "; "+ g_Player2.GladName + " HP: " + g_Player2.HP);
     }
 
-    public void ReviewBattleAftermath(string p1Action, string p2Action)
+    private void ReviewBattleAftermath(string p1Action, string p2Action)
     {
         if (g_Player1.HP > 0 && g_Player2.HP > 0)
         {
@@ -141,6 +145,7 @@ public class GameManager : MonoBehaviour
                 turnOutcomeText.SetText(StaticDialog.DrawJudgement(g_Player1.GladName, g_Player2.GladName));
             }
             turnOutcomeBox.SetActive(true);
+            endOfGameBox.SetActive(true);
             actionBox.SetActive(false);
         }
     }
@@ -152,6 +157,16 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(4.0f);
         turnOutcomeBox.SetActive(false);
         actionBox.SetActive(true);
+    }
+
+    private void SettleCPUPostTurnActions(string p1Action)
+    {
+        ((GladiatorCPU)g_Player2).Shift.RememberPlayersMove(p1Action);
+        ((GladiatorCPU)g_Player2).SetCombatAI(((GladiatorCPU)g_Player2).Shift.Analyze());
+        if (((GladiatorCPU)g_Player2).Shift.ParadigmShifted)
+        {
+            dialogText.SetText(StaticDialog.CPUCombatAIShiftText(((GladiatorCPU)g_Player2).Paradigm.CombatType, g_Player2.GladName));
+        }
     }
 
     public void StrikePressed()
@@ -172,5 +187,15 @@ public class GameManager : MonoBehaviour
     public void BlockPressed()
     {
         JudgeBatttle("block");
+    }
+
+    public void NewGamePressed()
+    {
+        SceneManager.LoadScene(1);
+    }
+
+    public void ReturnToLobbyPressed()
+    {
+        SceneManager.LoadScene(0);
     }
 }
