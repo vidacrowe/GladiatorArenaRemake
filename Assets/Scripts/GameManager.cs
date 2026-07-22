@@ -1,9 +1,18 @@
 using UnityEngine;
+using TMPro;
 using static UnityEditor.Experimental.GraphView.GraphView;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
     private Gladiator g_Player1, g_Player2;
+    private bool isGameActive = true;
+    public TextMeshProUGUI dialogText;
+    public TextMeshProUGUI namePlatePlayer;
+    public TextMeshProUGUI namePlateCPU;
+    public TextMeshProUGUI turnOutcomeText;
+    public GameObject turnOutcomeBox;
+    public GameObject actionBox;
 
     public Gladiator Player1
     { get { return g_Player1; } }
@@ -13,7 +22,15 @@ public class GameManager : MonoBehaviour
 
     public void CreatePlayerGladiator()
     {
-        g_Player1 = new Gladiator(PersistenceManager.PersistenceInstance.PlayerName);
+        if (PersistenceManager.PersistenceInstance != null)
+        {
+            g_Player1 = new Gladiator(PersistenceManager.PersistenceInstance.PlayerName);
+        }
+        else
+        {
+            g_Player1 = new Gladiator("Bravely Defaulting Gladiator");
+        }
+        
     }
 
     public void CreateCPUGladiator()
@@ -21,12 +38,35 @@ public class GameManager : MonoBehaviour
         g_Player2 = new GladiatorCPU();
     }
 
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        CreatePlayerGladiator();
+        CreateCPUGladiator();
+        dialogText.SetText(StaticDialog.CPUStrategyAIText(((GladiatorCPU)g_Player2).Shift.StrategyType));
+        namePlatePlayer.SetText(g_Player1.GladName);
+        namePlateCPU.SetText(g_Player2.GladName);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
     public void JudgeBatttle(string p1Action)
     {
         string p2Action = ((GladiatorCPU)g_Player2).CPUChooseAction();
-        Debug.Log("Player 1 Attack: " + p1Action + "; Player 2 HP: " + p2Action);
-        string actionkey = p1Action + p2Action;
-        switch (actionkey)
+        string actionKey = p1Action + p2Action;
+        CompareAttacks(actionKey);
+        ReviewBattleAftermath(p1Action, p2Action);
+
+        //((GladiatorCPU)g_Player2).SetCombatAI(((GladiatorCPU)g_Player2).Shift.Analyze());
+    }
+
+    public void CompareAttacks(string actionKey)
+    {
+        switch (actionKey)
         {
             case "strikeblock":
             case "parryparry":
@@ -50,9 +90,9 @@ public class GameManager : MonoBehaviour
                 //1 Damage to P1
                 DealDamage(1, 0);
                 break;
+            case "parrystrike":
             case "strikethrust":
             case "thrustblock":
-            case "parrystrike":
                 //2 Damage to P2
                 DealDamage(0, 2);
                 break;
@@ -63,7 +103,6 @@ public class GameManager : MonoBehaviour
                 DealDamage(2, 0);
                 break;
         }
-        ((GladiatorCPU)g_Player2).SetCombatAI(((GladiatorCPU)g_Player2).Shift.Analyze());
     }
 
     public void DealDamage(int p1Damage, int p2Damage)
@@ -73,17 +112,46 @@ public class GameManager : MonoBehaviour
         Debug.Log("Player 1 HP: " + g_Player1.HP + "; Player 2 HP: " + g_Player2.HP);
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void ReviewBattleAftermath(string p1Action, string p2Action)
     {
-        CreatePlayerGladiator();
-        CreateCPUGladiator();
+        if (g_Player1.HP > 0 && g_Player2.HP > 0)
+        {
+            //Both gladiators are still alive.
+            string actionKey = p1Action + p2Action;
+            turnOutcomeText.SetText(StaticDialog.TurnOutcomeText(actionKey, g_Player1.GladName, g_Player2.GladName));
+            StartCoroutine(DisplayTurnOutcome());
+        }
+        else
+        {
+            //End game and decide winner.
+            isGameActive = false;
+            if (g_Player1.HP == 0 && g_Player2.HP > 0)
+            {
+                //Player Loses.
+                turnOutcomeText.SetText(StaticDialog.WinnerJudgement(g_Player1.GladName, p1Action, g_Player2.GladName, p2Action, false));
+            }
+            else if (g_Player1.HP > 0 && g_Player2.HP == 0)
+            {
+                //Player Wins.
+                turnOutcomeText.SetText(StaticDialog.WinnerJudgement(g_Player1.GladName, p1Action, g_Player2.GladName, p2Action, true));
+            }
+            else
+            {
+                //Draw.
+                turnOutcomeText.SetText(StaticDialog.DrawJudgement(g_Player1.GladName, g_Player2.GladName));
+            }
+            turnOutcomeBox.SetActive(true);
+            actionBox.SetActive(false);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    IEnumerator DisplayTurnOutcome()
     {
-        
+        turnOutcomeBox.SetActive(true);
+        actionBox.SetActive(false);
+        yield return new WaitForSeconds(4.0f);
+        turnOutcomeBox.SetActive(false);
+        actionBox.SetActive(true);
     }
 
     public void StrikePressed()

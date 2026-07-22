@@ -29,7 +29,7 @@ public class GladiatorCPU : Gladiator
         {
             case 1:
                 gParadigm = new AttackerAI();
-                this.GladName = "Warrior Gladiator";
+                this.GladName = "Devil-Hunting Gladiator";
                 break;
             case 2:
                 gParadigm = new CounterAI();
@@ -37,11 +37,11 @@ public class GladiatorCPU : Gladiator
                 break;
             case 3:
                 gParadigm = new BalancedAI();
-                this.GladName = "Zenless Gladiator";
+                this.GladName = "Tarnished Gladiator";
                 break;
             case 4:
                 gParadigm = new DefensiveAI();
-                this.GladName = "Tarnished Gladiator";
+                this.GladName = "Stalwart Gladiator";
                 break;
             default:
                 break;

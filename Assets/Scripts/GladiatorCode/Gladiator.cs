@@ -23,6 +23,13 @@ public class Gladiator
 
     public void ReceiveDamage(int damageTaken)
     {
-        g_HP -= damageTaken;
+        if (g_HP - damageTaken < 0)
+        {
+            g_HP = 0;
+        }
+        else
+        {
+            g_HP -= damageTaken;
+        }
     }
 }

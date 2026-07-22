@@ -15,6 +15,9 @@ public abstract class StrategyShift : IShift
     public bool ParadigmShifted
     { get { return b_PardigmShifted; } set { b_PardigmShifted = value; } }
 
+    public int StrategyType
+    { get { return t_StrategyType; } }
+
     public abstract string Analyze(); //GladiatorCPU analyzes the battle and decides what to do.
 
     public void RememberPlayersMove(string battleactions) //GladiatorCPU takes note of what the player does.
