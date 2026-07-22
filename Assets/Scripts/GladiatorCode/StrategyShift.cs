@@ -7,13 +7,13 @@ interface IShift
     void RememberPlayersMove(string battleactions);
 }
 
-public abstract class StrategyShift : MonoBehaviour, IShift
+public abstract class StrategyShift : IShift
 {
-    protected int pStrikeCount = 0, pThrustCount = 0, pParryCount = 0, pBlockCount = 0;
-    protected bool pardigmShifted = false;
+    protected int p_StrikeCount = 0, p_ThrustCount = 0, p_ParryCount = 0, p_BlockCount = 0, t_StrategyType;
+    protected bool b_PardigmShifted = false;
 
     public bool ParadigmShifted
-    { get { return pardigmShifted; } set { pardigmShifted = value; } }
+    { get { return b_PardigmShifted; } set { b_PardigmShifted = value; } }
 
     public abstract string Analyze(); //GladiatorCPU analyzes the battle and decides what to do.
 
@@ -22,16 +22,16 @@ public abstract class StrategyShift : MonoBehaviour, IShift
         switch (battleactions)
         {
             case "strike":
-                pStrikeCount++;
+                p_StrikeCount++;
                 break;
             case "thrust":
-                pThrustCount++;
+                p_ThrustCount++;
                 break;
             case "parry":
-                pParryCount++;
+                p_ParryCount++;
                 break;
             case "block":
-                pBlockCount++;
+                p_BlockCount++;
                 break;
             default:
                 break;
@@ -41,6 +41,11 @@ public abstract class StrategyShift : MonoBehaviour, IShift
 
 class AdamantStrat : StrategyShift //CombatAI does not change.
 {
+    public AdamantStrat()
+    {
+        t_StrategyType = 1;
+    }
+
     public override string Analyze()
     {
         return "default";
@@ -49,13 +54,18 @@ class AdamantStrat : StrategyShift //CombatAI does not change.
 
 class DefensiveStrat : StrategyShift //Switches CombatAI to minimize damage.
 {
+    public DefensiveStrat()
+    {
+        t_StrategyType = 2;
+    }
+
     public override string Analyze()
     {
-        if (pStrikeCount >= 3)
+        if (p_StrikeCount >= 3)
             return "defensive";
-        else if (pParryCount >= 3)
+        else if (p_ParryCount >= 3)
             return "counter";
-        else if (pThrustCount >= 3)
+        else if (p_ThrustCount >= 3)
             return "counter";
         else
             return "default";
@@ -64,15 +74,20 @@ class DefensiveStrat : StrategyShift //Switches CombatAI to minimize damage.
 
 class ExploitStrat : StrategyShift //Switches CombatAI to maximize damage.
 {
+    public ExploitStrat()
+    {
+        t_StrategyType= 3;
+    }
+
     public override string Analyze()
     {
-        if (pStrikeCount >= 4)
+        if (p_StrikeCount >= 4)
             return "counter";
-        else if (pThrustCount >= 4)
+        else if (p_ThrustCount >= 4)
             return "attacker";
-        else if (pParryCount >= 4)
+        else if (p_ParryCount >= 4)
             return "balanced";
-        else if (pBlockCount >= 4)
+        else if (p_BlockCount >= 4)
             return "thrust";
         else
             return "default";
@@ -81,9 +96,14 @@ class ExploitStrat : StrategyShift //Switches CombatAI to maximize damage.
 
 class GamblerStrat : StrategyShift //Switches CombatAI to BalancedAI.
 {
+    public GamblerStrat()
+    {
+        t_StrategyType = 4;
+    }
+
     public override string Analyze()
     {
-        if (pStrikeCount + pThrustCount + pParryCount + pBlockCount > 5)
+        if (p_StrikeCount + p_ThrustCount + p_ParryCount + p_BlockCount > 5)
             return "balanced";
         else
             return "default";

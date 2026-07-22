@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Gladiator : MonoBehaviour
+public class Gladiator
 {
     protected int g_HP;
     protected string g_GladName;
