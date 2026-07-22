@@ -1519,6 +1519,7 @@ MonoBehaviour:
   turnOutcomeText: {fileID: 1580673732}
   playerHPText: {fileID: 8193875281850870169}
   foeHPText: {fileID: 149420591}
+  turnCountText: {fileID: 1241982222}
   turnOutcomeBox: {fileID: 223810623}
   actionBox: {fileID: 138418809}
   endOfGameBox: {fileID: 1468584076}

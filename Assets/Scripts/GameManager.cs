@@ -8,12 +8,14 @@ public class GameManager : MonoBehaviour
 {
     private Gladiator g_Player1, g_Player2;
     private bool isGameActive = true;
+    private int turnCount = 1;
     public TextMeshProUGUI dialogText;
     public TextMeshProUGUI namePlatePlayer;
     public TextMeshProUGUI namePlateCPU;
     public TextMeshProUGUI turnOutcomeText;
     public TextMeshProUGUI playerHPText;
     public TextMeshProUGUI foeHPText;
+    public TextMeshProUGUI turnCountText;
     public GameObject turnOutcomeBox;
     public GameObject actionBox;
     public GameObject endOfGameBox;
@@ -49,6 +51,8 @@ public class GameManager : MonoBehaviour
         dialogText.SetText(StaticDialog.CPUStrategyAIText(((GladiatorCPU)g_Player2).Shift.StrategyType));
         namePlatePlayer.SetText(g_Player1.GladName);
         namePlateCPU.SetText(g_Player2.GladName);
+        UpdateHPUI();
+        UpdateTurnCount();
     }
 
     // Update is called once per frame
@@ -158,6 +162,8 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(4.0f);
         turnOutcomeBox.SetActive(false);
         actionBox.SetActive(true);
+        turnCount++;
+        UpdateTurnCount();
     }
 
     private void SettleCPUPostTurnActions(string p1Action)
@@ -175,6 +181,12 @@ public class GameManager : MonoBehaviour
         playerHPText.SetText(string.Format("HP: {0} / 10", g_Player1.HP));
         foeHPText.SetText(string.Format("HP: {0} / 10", g_Player2.HP));
     }
+
+    private void UpdateTurnCount()
+    {
+        turnCountText.SetText(string.Format("Turn {0}", turnCount));
+    }
+
 
     public void StrikePressed()
     {
