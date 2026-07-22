@@ -18,7 +18,10 @@ public class MenuUIController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            StartNew();
+        }
     }
 
     public void StartNew()

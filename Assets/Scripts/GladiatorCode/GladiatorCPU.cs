@@ -22,7 +22,7 @@ public class GladiatorCPU : Gladiator
     public StrategyShift Shift
     { get { return gShift; } }
 
-    public void SetCombatAI()
+    private void SetCombatAI()
     {
         int rngCombat = Random.Range(1, 5);
         switch (rngCombat)
@@ -73,7 +73,7 @@ public class GladiatorCPU : Gladiator
         }
     }
 
-    public void SetStrategy()
+    private void SetStrategy()
     {
         int rngStrat = Random.Range(1, 5);
         switch (rngStrat)

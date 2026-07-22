@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI namePlatePlayer;
     public TextMeshProUGUI namePlateCPU;
     public TextMeshProUGUI turnOutcomeText;
+    public TextMeshProUGUI playerHPText;
+    public TextMeshProUGUI foeHPText;
     public GameObject turnOutcomeBox;
     public GameObject actionBox;
     public GameObject endOfGameBox;
@@ -60,8 +62,8 @@ public class GameManager : MonoBehaviour
         string p2Action = ((GladiatorCPU)g_Player2).CPUChooseAction();
         string actionKey = p1Action + p2Action;
         CompareAttacks(actionKey);
+        UpdateHPUI();
         ReviewBattleAftermath(p1Action, p2Action);
-        //Debug.Log(g_Player2.GladName + " Combat Type: " + ((GladiatorCPU)g_Player2).Paradigm.CombatType);
         if (!((GladiatorCPU)g_Player2).Shift.ParadigmShifted && isGameActive)
         {
             SettleCPUPostTurnActions(p1Action);
@@ -113,7 +115,6 @@ public class GameManager : MonoBehaviour
     {
         g_Player1.ReceiveDamage(p1Damage);
         g_Player2.ReceiveDamage(p2Damage);
-        Debug.Log(g_Player1.GladName + " HP: " + g_Player1.HP + "; "+ g_Player2.GladName + " HP: " + g_Player2.HP);
     }
 
     private void ReviewBattleAftermath(string p1Action, string p2Action)
@@ -167,6 +168,12 @@ public class GameManager : MonoBehaviour
         {
             dialogText.SetText(StaticDialog.CPUCombatAIShiftText(((GladiatorCPU)g_Player2).Paradigm.CombatType, g_Player2.GladName));
         }
+    }
+
+    private void UpdateHPUI()
+    {
+        playerHPText.SetText(string.Format("HP: {0} / 10", g_Player1.HP));
+        foeHPText.SetText(string.Format("HP: {0} / 10", g_Player2.HP));
     }
 
     public void StrikePressed()
