@@ -1,6 +1,13 @@
-This project was made for the final activity of the Unity Junior Programmer Pathway.
-
 In Gladiator Arena, choose your moves, but watch your opponent.
+
+Game Mechanics:
+- Each turn, you choose an action: Strike, Thrust, Parry, or Block. Your opponent will do the same.
+- The CPU opponent has a combat AI which defines their attack patterns. Some go on the offense with Strike and Thrust. Others try to counter your actions, Thrust-ing to pierce your guard or Parry to reflect your damage. Others go on the defensive.
+- In the middle of battle, the CPU may shift their combat AI depending on the moves of the player.
+- Deplete the opponent's HP to win.
+
+Technical Details:
+This project was made for the final activity of the Unity Junior Programmer Pathway.
 This was initially made as a project for my college programming class, wherein I had to apply object-oriented programming concepts to my code.
 
 The CPU opponent had a combat AI managed through inheritance. There were different child classes that would define how often the CPU opponent will use certain actions.
