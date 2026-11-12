@@ -3,7 +3,7 @@ In Gladiator Arena, choose your moves, but watch your opponent.
 Game Mechanics:
 - Each turn, you choose an action: Strike, Thrust, Parry, or Block. Your opponent will do the same.
 - The CPU opponent has a combat AI which defines their attack patterns. Some go on the offense with Strike and Thrust. Others try to counter your actions, Thrust-ing to pierce your guard or Parry to reflect your damage. Others go on the defensive.
-- In the middle of battle, the CPU may shift their combat AI depending on the moves of the player.
+- In the middle of battle, the CPU may shift their combat AI depending on the moves of the player. They may switch to minimize the damage they receive or exploit your own attack tendencies.
 - Deplete the opponent's HP to win.
 
 
