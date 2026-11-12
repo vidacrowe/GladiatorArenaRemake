@@ -6,7 +6,9 @@ Game Mechanics:
 - In the middle of battle, the CPU may shift their combat AI depending on the moves of the player.
 - Deplete the opponent's HP to win.
 
+
 Technical Details:
+
 This project was made for the final activity of the Unity Junior Programmer Pathway.
 This was initially made as a project for my college programming class, wherein I had to apply object-oriented programming concepts to my code.
 
